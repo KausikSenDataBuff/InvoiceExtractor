@@ -1,6 +1,7 @@
 import datetime
 import uuid
-
+from dotenv import load_dotenv
+import os
 def generate_token_id():
   """Generates a unique token ID based on current date and time.
 
@@ -18,8 +19,16 @@ def generate_token_id():
   token_id = f"{timestamp}-{random_uuid}"
 
   return token_id
+def get_secret(param):
+    '''
+    Fetches the value of param envirnment variable
+    stored in .env
+    '''
+    load_dotenv()    
+    return os.getenv(param)
 
 if __name__ == "__main__":
   # Generate and print a token ID
   token_id = generate_token_id()
   print("Generated token ID:", token_id)
+  print(get_secret('QUEUE_URL'))
