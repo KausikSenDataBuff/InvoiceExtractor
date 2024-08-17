@@ -1,0 +1,25 @@
+import datetime
+import uuid
+
+def generate_token_id():
+  """Generates a unique token ID based on current date and time.
+
+  Returns:
+    A string representing the unique token ID.
+  """
+
+  # Get current timestamp in milliseconds
+  timestamp = int(datetime.datetime.now().timestamp() * 1000)
+
+  # Generate a random UUID
+  random_uuid = str(uuid.uuid4())
+
+  # Combine timestamp and UUID to create a unique token ID
+  token_id = f"{timestamp}-{random_uuid}"
+
+  return token_id
+
+if __name__ == "__main__":
+  # Generate and print a token ID
+  token_id = generate_token_id()
+  print("Generated token ID:", token_id)
