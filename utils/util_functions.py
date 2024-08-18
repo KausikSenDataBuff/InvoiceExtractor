@@ -2,6 +2,7 @@ import datetime
 import uuid
 from dotenv import load_dotenv
 import os
+import json
 def generate_token_id():
   """Generates a unique token ID based on current date and time.
 
@@ -26,6 +27,22 @@ def get_secret(param):
     '''
     load_dotenv()    
     return os.getenv(param)
+
+def string_to_dict(string):
+  """Converts a string to a Python dictionary.
+
+  Args:
+    string: The string to convert.
+
+  Returns:
+    The converted dictionary.
+  """
+  try:
+
+    return json.loads(string.replace("'", '"'))
+  except json.JSONDecodeError:
+    print("Error: Invalid JSON string.")
+    return None
 
 if __name__ == "__main__":
   # Generate and print a token ID

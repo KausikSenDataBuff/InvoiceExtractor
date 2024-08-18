@@ -1,8 +1,14 @@
 import streamlit as st
 from PIL import Image
+import datetime
+import time
 from components.data_store import s3_ops
 from utils import util_functions as uf
 from application import processed_jobs as pj
+from components.queue import q_ops
+from components.login import users
+from components.data_store import ddb_ops
+
 def input_image_setup(uploaded_file):
     # Check if a file has been uploaded
     if uploaded_file is not None:
@@ -29,6 +35,7 @@ if uploaded_file is not None:
 submit=st.button("Upload")
 
 if submit:
+    # 1 Upload to S3
     bucket_name = uf.get_secret('BUCKET_NAME')
     image_id = uf.generate_token_id()
     image_data = input_image_setup(uploaded_file)  
@@ -37,7 +44,23 @@ if submit:
     st.subheader("File uploaded with ID : "+image_id)
     st.subheader("Please check in the processed job after sometime")
     #st.write(response)
-
-
-if st.button("See Processed Jobs"):
-  pj.processed_jobs_page()
+    # 2 Create job object
+    job_obj = {}
+    job_obj['bucket']=bucket_name
+    job_obj['token_id']=image_id
+    #Todo - to integrate with login components
+    job_obj['user_id']='dummy'
+    job_obj['post_time']=datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+    # 3 Push job to queue
+    queue_url = uf.get_secret('QUEUE_URL')
+    msg = q_ops.push_job(queue_url, job_obj)
+    # 4 Push job to DDB for status
+    ddb_table = uf.get_secret('DDB_USERS')
+    ddb_item = { 
+        'user_id' : users.get_userid(),
+        'job_status' : 'Pending',
+        'token_id' : image_id
+    }
+    ddb_ops.put_item_ddb(ddb_table,ddb_item)
+if st.button("See Your Jobs"):
+  pj.all_jobs_page()
