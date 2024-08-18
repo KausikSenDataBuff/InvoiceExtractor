@@ -38,11 +38,11 @@ def string_to_dict(string):
     The converted dictionary.
   """
   try:
-
     return json.loads(string.replace("'", '"'))
   except json.JSONDecodeError:
     print("Error: Invalid JSON string.")
     return None
+
 
 if __name__ == "__main__":
   # Generate and print a token ID

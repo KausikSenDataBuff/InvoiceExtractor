@@ -4,7 +4,7 @@ import datetime
 import time
 from components.data_store import s3_ops
 from utils import util_functions as uf
-from application import processed_jobs as pj
+from application import all_jobs as aj
 from components.queue import q_ops
 from components.login import users
 from components.data_store import ddb_ops
@@ -46,10 +46,10 @@ if submit:
     #st.write(response)
     # 2 Create job object
     job_obj = {}
-    job_obj['bucket']=bucket_name
-    job_obj['token_id']=image_id
+    job_obj['bucket'] = bucket_name
+    job_obj['token_id']= image_id
     #Todo - to integrate with login components
-    job_obj['user_id']='dummy'
+    job_obj['user_id']= users.get_userid()
     job_obj['post_time']=datetime.datetime.now().strftime('%Y%m%d%H%M%S')
     # 3 Push job to queue
     queue_url = uf.get_secret('QUEUE_URL')
@@ -63,4 +63,4 @@ if submit:
     }
     ddb_ops.put_item_ddb(ddb_table,ddb_item)
 if st.button("See Your Jobs"):
-  pj.all_jobs_page()
+  aj.paginate()
