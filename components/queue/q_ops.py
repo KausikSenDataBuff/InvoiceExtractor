@@ -1,5 +1,6 @@
 import boto3
 from utils import util_functions as uf
+boto3.setup_default_session(region_name=uf.get_secret('AWS_DEFAULT_REGION'))
 def push_job(queue_url, job_object):
   """Creates a job in a specified AWS queue.
 
