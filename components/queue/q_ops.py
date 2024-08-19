@@ -22,7 +22,7 @@ def get_job(queue_url):
       MaxNumberOfMessages=1,
       WaitTimeSeconds=20
   )
-
+  message_body = receipt_handle = []
   if 'Messages' in response:
     for message in response['Messages']:
       message_body = message['Body']

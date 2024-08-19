@@ -19,7 +19,7 @@ def put_item_ddb(ddb_table,item_data):
         print("Error putting item:", e)
 
 
-def query_ddb(table_name, pk_name,pk_val,sk_name=None,sk_val=None, filter_expr=None, scan_index_forward=True):
+def query_ddb(table_name, pk_name,pk_val,sk_name=None,sk_val=None, filter_expr=None, filter_value=None, scan_index_forward=True):
     """Queries a DynamoDB table for items matching the specified partition key and sort key.
     Args:
     table_name: The name of the DynamoDB table.
@@ -42,7 +42,8 @@ def query_ddb(table_name, pk_name,pk_val,sk_name=None,sk_val=None, filter_expr=N
 
     if filter_expr is not None:
         key_condition_expression += " AND " + filter_expr
-
+        expression_attribute_values[":fv"] = filter_value
+    #Note that if filter expression is specified, then SK becomes mandatory 
     try:
         response = table.query(
             KeyConditionExpression=key_condition_expression,
