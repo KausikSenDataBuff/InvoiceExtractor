@@ -1,4 +1,5 @@
 import boto3
+from utils import util_functions as uf
 def upload_image_to_s3(bucket_name, image_parts, image_id):
   """Pushes an image to an S3 bucket.
 
@@ -8,7 +9,7 @@ def upload_image_to_s3(bucket_name, image_parts, image_id):
     image_id: The ID to use for the uploaded image.
   """
 
-  s3 = boto3.client('s3')
+  s3 = boto3.client('s3',region_name = uf.get_secret('AWS_DEFAULT_REGION')) 
 
   try:
     s3.put_object(
@@ -32,7 +33,7 @@ def read_object_from_s3(bucket_name, object_name):
     The contents of the object as a string.
   """
 
-  s3 = boto3.client('s3')
+  s3 = boto3.client('s3',region_name = uf.get_secret('AWS_DEFAULT_REGION')) 
 
   try:
     response = s3.get_object(Bucket=bucket_name, Key=object_name)
