@@ -1,5 +1,5 @@
 import streamlit as st
-from st_aggrid import AgGrid,ColumnsAutoSizeMode,GridOptionsBuilder,GridUpdateMode
+# from st_aggrid import AgGrid,ColumnsAutoSizeMode,GridOptionsBuilder,GridUpdateMode
 import pandas as pd
 from components.data_store import ddb_ops 
 from utils import util_functions as uf
