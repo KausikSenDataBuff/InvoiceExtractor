@@ -1,6 +1,6 @@
 import boto3
 from utils import util_functions as uf
-boto3.setup_default_session(region_name=uf.get_secret('AWS_DEFAULT_REGION'))
+boto3.setup_default_session(region_name='ap-south-1')
 def push_job(queue_url, job_object):
   """Creates a job in a specified AWS queue.
 
@@ -9,7 +9,7 @@ def push_job(queue_url, job_object):
     job_object: The job object to be added to the queue.
   """
 
-  sqs = boto3.client('sqs',region_name = uf.get_secret('AWS_DEFAULT_REGION'))
+  sqs = boto3.client('sqs',region_name = 'ap-south-1')
   response = sqs.send_message(
       QueueUrl=queue_url,
       MessageBody=str(job_object)
@@ -18,7 +18,7 @@ def push_job(queue_url, job_object):
   return response['MessageId']
   
 def get_job(queue_url):
-  sqs = boto3.client('sqs',region_name = uf.get_secret('AWS_DEFAULT_REGION'))
+  sqs = boto3.client('sqs',region_name = 'ap-south-1')
   response = sqs.receive_message(
       QueueUrl=queue_url,
       MaxNumberOfMessages=1,
@@ -39,7 +39,7 @@ def delete_msg(queue_url, receipt_handle):
     queue_url: The URL of the SQS queue.
     receipt_handle: The receipt handle of the message to delete.
   """
-  sqs = boto3.client('sqs',region_name = uf.get_secret('AWS_DEFAULT_REGION'))
+  sqs = boto3.client('sqs',region_name = 'ap-south-1')
   try:
     response = sqs.delete_message(
         QueueUrl=queue_url,
